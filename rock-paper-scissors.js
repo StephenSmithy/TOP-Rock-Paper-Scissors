@@ -12,6 +12,8 @@ function getComputerChoice() {
     }
 }
 
+/* plays a round of rock paper scissors and returns a result as an array with two values
+, the result and a text string for the result */
 function playRound(playerSelection, computerSelection) {
     let normalisedPlayerSelection = playerSelection.toLowerCase();
     let normalisedComputerSelection = computerSelection.toLowerCase();
@@ -46,33 +48,43 @@ function game() {
     let winCounter = 0;
     let lossCounter = 0;
     let drawCounter = 0;
-    for (let i = 0; i < 5; i++) {
-        let userInput = prompt('Enter your choice: Rock, Paper or Scissors?');
-        let result = playRound(userInput, getComputerChoice());
-        console.log(result[1]);
+    for (let i = 0; i < 5; i++) { // Loops
+        let userInput = prompt('Enter your choice: Rock, Paper or Scissors?'); // Prompts for the users input
+        let result = playRound(userInput, getComputerChoice()); // Plays a round
+        console.log(result[1]); //Outputs the result to the screen
         if (result[0] === 'Win') {
             winCounter++;
         } else if (result[0] === 'Loss') {
             lossCounter++;
         } else if (result[0] === 'Tie') {
             drawCounter++
-        }
+        } // Logic to keep count of win draws and losses
     }
-    console.log(`You won ${winCounter} games, lost ${lossCounter} games and drew ${drawCounter} games.`)
+    console.log(`You won ${winCounter} game${pluralise(winCounter)}, lost ${lossCounter} game${pluralise(lossCounter)} and drew ${drawCounter} game${pluralise(drawCounter)}.`)
 }
 
+/* pluralises a word based on the input number */
+function pluralise(inputNumber) {
+    if (inputNumber === 1) {
+        return '';
+    } else {
+        return 's';
+    }
+}
+
+/* returns a random integer between 1 and the input maximum */
 function getRandomNumber(maxNum) {
     let x = Math.ceil(Math.random() * maxNum);
     return x;
 }
 
-/* Confirming Randomness over 100000 plays */
-function checkDistribution() {
+/* Confirming Randomness over an input number of plays plays */
+function checkDistribution(querySize) {
     let rock = 0;
     let paper = 0;
     let scissors = 0;
     let other = 0;
-    for (let i = 1; i <= 100000; i++) {
+    for (let i = 1; i <= querySize; i++) {
         let x = getRandomNumber(3);
         if (x === 1) {
             rock++;
