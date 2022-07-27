@@ -5,8 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./rock-paper-scissors.js" defer></script>
   </head>
   <body>
-    <script src="./rock-paper-scissors.js"></script>
+    <div class="container">
+      <div class="header">
+        <h1>BEAT THE MACHINE</h1>
+      </div>
+      <div class="centralContent">
+        <div class="player">
+          <h2>You</h2>
+          <img id="playerImg" src="./img_lib/man.png" alt="player" />
+        </div>
+        <span id="playerCounter">0</span>
+        <span id="robotCounter">0</span>
+        <div class="robot">
+          <h2>The Machine</h2>
+          <img id="robotImg" src="./img_lib/robot.png" alt="robot" />
+        </div>
+      </div>
+      <div class="buttonContainer">
+        <h1 id="result" class="invisible">Text</h1>
+        <h1 class="centeredHeading">MAKE YOUR CHOICE</h1>
+        <div class="buttons">
+          <button id="rock" class="rockButton"></button>
+          <button id="paper" class="paperButton"></button>
+          <button id="scissors" class="scissorsButton"></button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,3 +1,41 @@
+//Global declarations
+
+let playerWinCounter = 0;
+let robotWinCounter = 0;
+
+//Event listeners and transition enders.
+
+const buttons = document.querySelectorAll('button');
+console.log(buttons);
+buttons.forEach((button) =>
+    button.addEventListener('click', playRound)
+) ;
+
+buttons.forEach((button) =>
+    button.addEventListener('transitionend', removeButtonTransition)
+) ;
+
+const resultHeading = document.querySelector('#result');
+resultHeading.addEventListener('transitionend', removeTransition);
+resultHeading.addEventListener('transitioncancel', removeTransition);
+
+const images = document.querySelectorAll('img');
+images.forEach((img) =>
+    img.addEventListener('transitionend', removeDeath)
+);
+
+function removeDeath(e) {
+    this.classList.remove('death');
+}
+
+function removeButtonTransition(e) {
+    this.classList.remove('grow');
+}
+
+function removeTransition(e) {
+    this.classList.remove('visible');
+}
+
 
 function getComputerChoice() {
     let x = getRandomNumber(3);
@@ -12,65 +50,73 @@ function getComputerChoice() {
     }
 }
 
-/* plays a round of rock paper scissors and returns a result as an array with two values
-, the result and a text string for the result */
-function playRound(playerSelection, computerSelection) {
-    let normalisedPlayerSelection = playerSelection.toLowerCase();
-    let normalisedComputerSelection = computerSelection.toLowerCase();
+
+
+/* plays a round of rock paper scissors and outputs the result */
+function playRound(e) {
+    let normalisedPlayerSelection = e.target.id.toLowerCase();
+    let normalisedComputerSelection = getComputerChoice().toLowerCase();
+    let result;
     if (normalisedComputerSelection === normalisedPlayerSelection) {
-        return ['Tie',`Tie! You both chose ${normalisedComputerSelection}`]    
+        result = 'Draw';
     } else if (normalisedPlayerSelection === 'rock') {
         if (normalisedComputerSelection === 'paper') {
-            return ['Loss','You lose, paper beats rock!']
+            robotWinCounter++;
+            result = 'You Lose';
         } else if (normalisedComputerSelection === 'scissors') {
-            return ['Win',`You win, rock beats scissors!`]
+            playerWinCounter++;
+            result = 'You Win';
         }
     } else if (normalisedPlayerSelection === 'paper') {
         if (normalisedComputerSelection === 'scissors') {
-            return ['Loss', 'You lose, scissors beats paper!']
+            robotWinCounter++;
+            result = 'You Lose';
         } else if (normalisedComputerSelection === 'rock') {
-            return ['Win',`You win, paper beats rock!`]
+            playerWinCounter++;
+            result = 'You Win';
         }
 
     } else if (normalisedPlayerSelection === 'scissors') {
         if (normalisedComputerSelection === 'rock') {
-            return ['Loss','You lose, rock beats scissors!']
+            robotWinCounter++;
+            result = 'You Lose';
         } else if (normalisedComputerSelection === 'paper') {
-            return ['Win',`You win, scissors beats paper!`]
+            playerWinCounter++;
+            result = 'You Win';
         }
 
     }
-
+    e.target.classList.add('grow');
+    
+    updateScore();    
+    document.querySelector('#result').innerHTML = result;
+    document.querySelector('#result').classList.add('visible');
+    
 
 }
 
-function game() {
-    let winCounter = 0;
-    let lossCounter = 0;
-    let drawCounter = 0;
-    for (let i = 0; i < 5; i++) { // Loops
-        let userInput = prompt('Enter your choice: Rock, Paper or Scissors?'); // Prompts for the users input
-        let result = playRound(userInput, getComputerChoice()); // Plays a round
-        console.log(result[1]); //Outputs the result to the screen
-        if (result[0] === 'Win') {
-            winCounter++;
-        } else if (result[0] === 'Loss') {
-            lossCounter++;
-        } else if (result[0] === 'Tie') {
-            drawCounter++
-        } // Logic to keep count of win draws and losses
+
+function updateScore() {
+
+    document.querySelector('#playerCounter').innerHTML = playerWinCounter;
+    document.querySelector('#robotCounter').innerHTML = robotWinCounter;
+    
+
+    if (playerWinCounter === 5) {
+        document.querySelector('#robotImg').classList.add('death');
+        robotWinCounter=0;
+        playerWinCounter=0;
     }
-    console.log(`You won ${winCounter} game${pluralise(winCounter)}, lost ${lossCounter} game${pluralise(lossCounter)} and drew ${drawCounter} game${pluralise(drawCounter)}.`)
+    if (robotWinCounter === 5) {
+        document.querySelector('#playerImg').classList.add('death');
+        robotWinCounter=0;
+        playerWinCounter=0;
+    }
+
+  
+
 }
 
-/* pluralises a word based on the input number */
-function pluralise(inputNumber) {
-    if (inputNumber === 1) {
-        return '';
-    } else {
-        return 's';
-    }
-}
 
 /* returns a random integer between 1 and the input maximum */
 function getRandomNumber(maxNum) {
